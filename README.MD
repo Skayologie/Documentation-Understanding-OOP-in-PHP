@@ -181,6 +181,102 @@ Session ended for user: Jawad
             echo $obj->getName(); // Output: Private Access
 ```
 
+4 Interfaces et Traits :
+        4.1 Interfaces 
+            Interfaces define a contract for classes. They specify methods that a class must implement, without providing any implementation details. This ensures consistency and enforces a common structure across different classes, even if they are unrelated.
+        
+        4.2 Traits 
+            Traits are a mechanism for reusing code in multiple classes. They allow you to define methods and properties that can be shared across classes, avoiding duplication and promoting code reuse. Unlike inheritance, traits are not meant for establishing relationships between classes. 
+        
+5 Namespaces and Autoloading in PHP :
+        5.1 What Are Namespaces?
+            Namespaces in PHP are a way to encapsulate and organize classes, interfaces, functions, and constants into separate, logical groups. They help avoid name collisions, especially in large applications or when integrating third-party libraries.
+```php
+namespace App\Models;
+
+class User {
+    public function getName() {
+        return "John Doe";
+    }
+}
+
+// File: index.php
+require_once 'User.php';
+
+use App\Models\User;
+
+$user = new User();
+echo $user->getName(); // Outputs: John Doe
+```
+        5.2 Autoloading in PHP is a mechanism to automatically load required class files when they are used, without manually including them with require or 
+            include. This is achieved using an autoloader function.
+
+```php
+spl_autoload_register(function ($className) {
+    $file = __DIR__ . '/' . str_replace('\\', '/', $className) . '.php';
+    if (file_exists($file)) {
+        require_once $file;
+    }
+});
+```
+
+
+6 Magical Methods in PHP :
+        Magical methods in PHP are special methods that start with double underscores (__) and have predefined purposes. PHP calls them automatically when specific events occur in your class. They make object-oriented programming more dynamic and powerful.
+        6.1 __construct :
+            Called automatically when an object is created. It's used to initialize properties or perform setup tasks.
+```php
+class User {
+    public $name;
+
+    public function __construct($name) {
+        $this->name = $name;
+        echo "User $name created!";
+    }
+}
+
+$user = new User("Jawad"); // Outputs: User Jawad created!
+```
+        6.2 __destruct : 
+            Called when an object is destroyed (e.g., at the end of a script or when using unset). It's used for cleanup tasks.
+```php
+class User {
+    public $name;
+
+    public function __construct($name) {
+        $this->name = $name;
+    }
+
+    public function __destruct() {
+        echo "User {$this->name} destroyed!";
+    }
+}
+
+$user = new User("Jawad");
+unset($user); // Outputs: User Jawad destroyed!
+```
+        
+        6.3 __get:
+            Called when trying to access a property that is not accessible or does not exist.
+```php
+class User {
+    private $data = [];
+
+    public function __get($name) {
+        return $this->data[$name] ?? "Property $name not found.";
+    }
+
+    public function __set($name, $value) {
+        $this->data[$name] = $value;
+    }
+}
+
+$user = new User();
+$user->age = 21; // Uses __set to set age
+echo $user->age; // Uses __get to retrieve age
+echo $user->name; // Outputs: Property name not found.
+```
+
 
 
 
